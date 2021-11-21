@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -64,16 +64,12 @@ function AddEdit({ history, match }) {
             .catch(alertService.error);
     }
 
-    const [user, setUser] = useState({});
-    const [showPassword, setShowPassword] = useState(false);
-
     useEffect(() => {
         if (!isAddMode) {
             // get user and set form fields
             userService.getById(id).then(user => {
                 const fields = ['title', 'firstName', 'lastName', 'email', 'role'];
                 fields.forEach(field => setValue(field, user[field]));
-                setUser(user);
             });
         }
     }, []);
@@ -128,15 +124,7 @@ function AddEdit({ history, match }) {
             }
             <div className="form-row">
                 <div className="form-group col">
-                    <label>
-                        Password
-                        {!isAddMode &&
-                            (!showPassword
-                                ? <span> - <a onClick={() => setShowPassword(!showPassword)} className="text-primary">Show</a></span>
-                                : <em> - {user.password}</em>
-                            )
-                        }
-                    </label>
+                    <label>Password</label>
                     <input name="password" type="password" ref={register} className={`form-control ${errors.password ? 'is-invalid' : ''}`} />
                     <div className="invalid-feedback">{errors.password?.message}</div>
                 </div>
